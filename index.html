@@ -30,7 +30,17 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">My Lists</h5>
-                            <div id="side-panel"></div>
+                            <div class="list-card" onclick="openList('listOne')">
+                                <h6>List 1</h6>
+                            </div>
+                            
+                            <div class="list-card" onclick="openList('listTwo')">
+                                <h6>List 2</h6>
+                            </div>
+                            
+                            <div class="list-card" onclick="openList('listThree')">
+                                <h6>List 3</h6>
+                            </div>
                         </div>
                     </div>
 
@@ -40,13 +50,15 @@
                     <div class="card">
                         <div class="card-body">
                             <div id="activeList"></div>
+                                <h5 id="activeListTitle">Select a list to begin</h5>
+                                <div id="activeListContent"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
+    <script src="./assets/main.js"></script>
 </body>
 
 </html>
