@@ -10,8 +10,8 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./assets/style.css">
-  </head>
-  <!--bootstrap uses a system of grid and contains with flexbox for the layout. 
+</head>
+<!--bootstrap uses a system of grid and contains with flexbox for the layout. 
     I set this up with 2 container fluid div classes. The first one is just for
     the main header. The second one is for the active list, and created list panels.
     The active list and created list panels were set up as columns underneath the
@@ -34,6 +34,17 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">My Lists</h5>
+                <div class="list-card" onclick="openList('listOne')">
+                  <h6>List 1</h6>
+                </div>
+
+                <div class="list-card" onclick="openList('listTwo')">
+                  <h6>List 2</h6>
+                </div>
+
+                <div class="list-card" onclick="openList('listThree')">
+                  <h6>List 3</h6>
+                </div>
                 <div id="side-panel"></div>
               </div>
             </div>
@@ -43,8 +54,8 @@
             <!-- col-9 is a bootstrap specific column for 75% width-->
             <div class="card">
               <div class="card-body">
-                <div id="activeList">
-                    <div class="input-group mb-3">
+                <div id="activeList"></div>
+                                   <div class="input-group mb-3">
                         <input type="text" id="taskInput" class="form-control" placeholder="Add a new task...">
                         <button class="btn btn-primary" id="addTaskBtn">Add Task</button>
                     </div>
