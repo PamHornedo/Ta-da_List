@@ -27,17 +27,15 @@
             <div class="row">
                 <!--div class for the side panel displaying created lists-->
                 <div class="col-3 p-0"> <!--col-3 is a bootstrap specific column for 25% width. -->
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">My Lists</h5>
-                            <div id="side-panel"></div>
-                        </div>
+                    <button id="create-list-btn" class="btn btn-primary w-100 mb-2">Create List</button>
+                    <div class="my-lists-container">
+                        <h2 class="h2 my-list">My Lists</h2>
+                        <ul class="list-group list-group-flush" id="my-list"></ul>
                     </div>
-
                 </div>
                 <!--div class for the main active list window-->
                 <div class="col-9"> <!-- col-9 is a bootstrap specific column for 75% width-->
-                    <div class="card">
+                    <div class="activeListarea">
                         <div class="card-body">
                             <div id="activeList"></div>
                         </div>
@@ -46,7 +44,8 @@
             </div>
         </div>
     </main>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="./assets/main.js"></script>
 </body>
 
 </html>
