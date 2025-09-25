@@ -50,6 +50,7 @@ myListsContainer.addEventListener('click', (event) => { //listen to any click on
     if (listItem) {
         const listId = listItem.getAttribute('data-list-id'); 
         displayList(listId); //runs the display function with the correct ID to show clicked list
+        console.log ('button clicked')
     }
 });
 
