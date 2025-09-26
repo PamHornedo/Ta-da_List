@@ -129,6 +129,25 @@ function createTaskElement(taskText) {
   const completeButton = listItem.querySelector(".complete-btn");
   completeButton.addEventListener("click", () => {
     listItem.remove();
+    let id;
+    const elem = document.getElementById('animate');
+
+    elem.style.display = 'block';
+    elem.style.top = '0px';
+    let pos =0;
+    clearInterval(id);
+    id = setInterval(frame, 5);
+    function frame(){
+      if (pos ==350){
+        clearInterval(id);
+        elem.style.display ='none' //hide after animation complete
+      }
+      else{
+        pos++;
+        elem.style.top = pos + 'px';
+
+      }
+    }
   });
 }
 
