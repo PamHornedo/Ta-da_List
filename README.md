@@ -9,6 +9,10 @@ Ta-Da List consists of a header area and a main area. The main area is structure
 When you click the "Create List" button, a new list item is added to the "My Lists" card. This card functions as a navigation panel: clicking on any list will make it active and display its contents in the Active List card on the right-hand column.
 The right-hand column contains the Active List card, where you can manage tasks for the selected list. To add a task, type it into the text area and either press Enter on your keyboard or click the "Add Task" button. Once a task is added, you can mark it as complete using the "Mark as Complete" button or remove it entirely with the "Delete Task" button.
 
+Ta-da list uses JavaScript, HTML and CSS. 
 
-![alt text](assets/gif/Animation.gif)
+
+![alt text](assets/gif/Animation2.gif)
+
+
 
