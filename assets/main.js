@@ -1,11 +1,20 @@
+// Global Variables //
+
 // A simple data store for our lists
 const listData = {}; //simple database to hold all list created and get unique ID
 let listCounter = 0; //counter each time we create list the number will increase it gives it unique name and ID
-
 // Get references to the HTML elements
 const createListBtn = document.getElementById("create-list-btn"); //find the button and create a refrence for it
 const myListsContainer = document.getElementById("my-list"); //find a list of mylist
 const activeListDisplay = document.getElementById("activeList"); //find the div of the activelist
+const taskInput = document.getElementById("taskInput");
+const addTaskBtn = document.getElementById("addTaskBtn");
+const taskList = document.getElementById("taskList");
+let taskToDelete = null; // NEW: keeps track of which task we want to delete
+// Identifying selected list
+let currentSelectedList = "";
+
+// ------------------- //
 
 // Function to create a new list
 function createNewList() {
@@ -35,9 +44,6 @@ function createNewList() {
   console.table(listData);
   updateTaskList();
 }
-
-// Identifying selected list
-let currentSelectedList = "";
 
 function setCurrentList(listId) {
   currentSelectedList = listId;
@@ -74,11 +80,6 @@ myListsContainer.addEventListener("click", (event) => {
 // Initial display of the "List Name" heading
 activeListDisplay.textContent = "Select or Create a List"; //sets inetial text div in the active list when page loads
 
-const taskInput = document.getElementById("taskInput");
-const addTaskBtn = document.getElementById("addTaskBtn");
-const taskList = document.getElementById("taskList");
-let taskToDelete = null; // NEW: keeps track of which task we want to delete
-
 // Add event listener for add task button
 addTaskBtn.addEventListener("click", addTask);
 taskInput.addEventListener("keypress", (event) => {
@@ -87,8 +88,35 @@ taskInput.addEventListener("keypress", (event) => {
   }
 });
 
+function createTaskElement(taskText) {
+  const listItem = document.createElement("li");
+  listItem.className = "list-group-item task-item";
+  listItem.innerHTML = `<div class="task"><span>${taskText}</span></div>
+    <div class="list-actions"><button type="button" class="btn btn-success btn-sm complete-btn">Mark as Complete</button>
+    <button class="btn btn-danger btn-sm delete-task">Delete Task</button>
+    </div>`;
+  taskList.appendChild(listItem);
+  taskInput.value = ""; // Clears text input
+
+  // Add event listener for delete button
+  const deleteButton = listItem.querySelector(".delete-task");
+  deleteButton.addEventListener("click", () => {
+    taskToDelete = listItem; // store reference to task we want to delete
+    const modal = new bootstrap.Modal(
+      document.getElementById("deleteConfirmModal")
+    ); // open modal
+    modal.show();
+  });
+
+  // Add event listener for complete button
+  const completeButton = listItem.querySelector(".complete-btn");
+  completeButton.addEventListener("click", () => {
+    listItem.remove();
+  });
+}
+
 // Function for adding tasks to list
-function addTask(event) {
+function addTask() {
   // Getting the current list selected
   const currentList = listData[currentSelectedList];
   const taskText = taskInput.value.trim();
@@ -98,30 +126,7 @@ function addTask(event) {
   console.log(currentList);
 
   if (taskText !== "") {
-    const listItem = document.createElement("li");
-    listItem.className = "list-group-item task-item";
-    listItem.innerHTML = `<div class="task"><span>${taskText}</span></div>
-    <div class="list-actions"><button type="button" class="btn btn-success btn-sm complete-btn">Mark as Complete</button>
-    <button class="btn btn-danger btn-sm delete-task">Delete Task</button>
-    </div>`;
-    taskList.appendChild(listItem);
-    taskInput.value = ""; // Clears text input
-
-    // Add event listener for delete button
-    const deleteButton = listItem.querySelector(".delete-task");
-    deleteButton.addEventListener("click", () => {
-      taskToDelete = listItem; // store reference to task we want to delete
-      const modal = new bootstrap.Modal(
-        document.getElementById("deleteConfirmModal")
-      ); // open modal
-      modal.show();
-    });
-
-    // Add event listener for complete button
-    const completeButton = listItem.querySelector(".complete-btn");
-    completeButton.addEventListener("click", () => {
-      listItem.remove();
-    });
+    createTaskElement(taskText);
   } else {
   }
 }
@@ -134,32 +139,7 @@ function updateTaskList() {
   });
 
   const currentList = listData[currentSelectedList];
-  currentList.tasks.forEach((task) => {
-    const listItem = document.createElement("li");
-    listItem.className = "list-group-item task-item";
-    listItem.innerHTML = `<div class="task"><span>${task}</span></div>
-    <div class="list-actions"><button type="button" class="btn btn-success btn-sm complete-btn">Mark as Complete</button>
-    <button class="btn btn-danger btn-sm delete-task">Delete Task</button>
-    </div>`;
-    taskList.appendChild(listItem);
-    taskInput.value = ""; // Clears text input
-
-    // Add event listener for delete button
-    const deleteButton = listItem.querySelector(".delete-task");
-    deleteButton.addEventListener("click", () => {
-      taskToDelete = listItem; // store reference to task we want to delete
-      const modal = new bootstrap.Modal(
-        document.getElementById("deleteConfirmModal")
-      ); // open modal
-      modal.show();
-    });
-
-    // Add event listener for complete button
-    const completeButton = listItem.querySelector(".complete-btn");
-    completeButton.addEventListener("click", () => {
-      listItem.remove();
-    });
-  });
+  currentList.tasks.forEach((task) => createTaskElement(task));
 }
 
 // ✅ Confirm delete handler
