@@ -1,7 +1,7 @@
-// Global Variables //
+// Global Variables - DOM //
 
 // A simple data store for our lists
-const listData = {}; //simple database to hold all list created and get unique ID
+let listData = {}; //simple database to hold all list created and get unique ID
 let listCounter = 0; //counter each time we create list the number will increase it gives it unique name and ID
 // Get references to the HTML elements
 const createListBtn = document.getElementById("create-list-btn"); //find the button and create a refrence for it
@@ -15,6 +15,27 @@ let taskToDelete = null; // NEW: keeps track of which task we want to delete
 let currentSelectedList = "";
 
 // ------------------- //
+listData = JSON.parse(localStorage.getItem("My Task Lists")) || {};
+for (const listId in listData) {
+  const value = listData[listId];
+  newListElement(value.name, listId);
+  listCounter++;
+}
+
+function saveTaskLists() {
+  localStorage.setItem("My Task Lists", JSON.stringify(listData));
+}
+
+function newListElement(listName, listId) {
+  // Create the HTML element for the new list
+  const listItem = document.createElement("li"); //create new list element read to be added to the page
+  listItem.classList.add("list-group-item"); // add class to make it look list item
+  listItem.textContent = listName; // set the name of list to be same as Id
+  listItem.setAttribute("data-list-id", listId); //attribute used by event listener to know which list to display when click it
+
+  // Append the new list to the container
+  myListsContainer.appendChild(listItem); //add the new list to the UL
+}
 
 // Function to create a new list
 function createNewList() {
@@ -29,20 +50,14 @@ function createNewList() {
     name: listName,
     tasks: [],
   };
-  // Create the HTML element for the new list
-  const listItem = document.createElement("li"); //create new list element read to be added to the page
-  listItem.classList.add("list-group-item"); // add class to make it look list item
-  listItem.textContent = listName; // set the name of list to be same as Id
-  listItem.setAttribute("data-list-id", listId); //attribute used by event listener to know which list to display when click it
 
-  // Append the new list to the container
-  myListsContainer.appendChild(listItem); //add the new list to the UL
+  newListElement(listName, listId);
 
   // Automatically display the new list
   displayList(listId); //used to display the new list on activelist area
 
-  console.table(listData);
   updateTaskList();
+  saveTaskLists();
 }
 
 function setCurrentList(listId) {
@@ -59,6 +74,7 @@ function displayList(listId) {
     activeListDisplay.textContent = list.name; //takes the list name and plae the text in the active list area
 
     setCurrentList(listId);
+    saveTaskLists();
   }
 }
 
@@ -74,6 +90,7 @@ myListsContainer.addEventListener("click", (event) => {
     displayList(listId); //runs the display function with the correct ID to show clicked list
     console.log("button clicked");
     updateTaskList();
+    saveTaskLists();
   }
 });
 
@@ -121,14 +138,13 @@ function addTask() {
   const currentList = listData[currentSelectedList];
   const taskText = taskInput.value.trim();
 
-  // Adding task to current list
-  currentList.tasks.push(taskText);
-  console.log(currentList);
-
   if (taskText !== "") {
     createTaskElement(taskText);
+    // Adding task to current list
+    currentList.tasks.push(taskText);
   } else {
   }
+  saveTaskLists();
 }
 
 // Handles when a user creates or selects a list
@@ -140,6 +156,8 @@ function updateTaskList() {
 
   const currentList = listData[currentSelectedList];
   currentList.tasks.forEach((task) => createTaskElement(task));
+  console.log(currentList);
+  saveTaskLists();
 }
 
 // ✅ Confirm delete handler
@@ -152,6 +170,7 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
   const modalEl = document.getElementById("deleteConfirmModal");
   const modal = bootstrap.Modal.getInstance(modalEl);
   modal.hide();
+  saveTaskLists();
 });
 
 document.getElementById("cancelDeleteBtn").addEventListener("click", () => {
