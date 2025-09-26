@@ -33,6 +33,7 @@ function createNewList() {
   displayList(listId); //used to display the new list on activelist area
 
   console.table(listData);
+  updateTaskList();
 }
 
 // Identifying selected list
@@ -66,6 +67,7 @@ myListsContainer.addEventListener("click", (event) => {
     const listId = listItem.getAttribute("data-list-id");
     displayList(listId); //runs the display function with the correct ID to show clicked list
     console.log("button clicked");
+    updateTaskList();
   }
 });
 
@@ -91,9 +93,13 @@ function addTask(event) {
   const currentList = listData[currentSelectedList];
   const taskText = taskInput.value.trim();
 
+  // Adding task to current list
+  currentList.tasks.push(taskText);
+  console.log(currentList);
+
   if (taskText !== "") {
     const listItem = document.createElement("li");
-    listItem.className = "list-group-item";
+    listItem.className = "list-group-item task-item";
     listItem.innerHTML = `<div class="task"><span>${taskText}</span></div>
     <div class="list-actions"><button type="button" class="btn btn-success btn-sm complete-btn">Mark as Complete</button>
     <button class="btn btn-danger btn-sm delete-task">Delete Task</button>
@@ -118,10 +124,42 @@ function addTask(event) {
     });
   } else {
   }
+}
 
-  // Adding task to current list
-  currentList.tasks.push(taskText);
-  console.log(currentList);
+// Handles when a user creates or selects a list
+function updateTaskList() {
+  const taskGroup = document.querySelectorAll(".task-item");
+  taskGroup.forEach((task) => {
+    task.remove();
+  });
+
+  const currentList = listData[currentSelectedList];
+  currentList.tasks.forEach((task) => {
+    const listItem = document.createElement("li");
+    listItem.className = "list-group-item task-item";
+    listItem.innerHTML = `<div class="task"><span>${task}</span></div>
+    <div class="list-actions"><button type="button" class="btn btn-success btn-sm complete-btn">Mark as Complete</button>
+    <button class="btn btn-danger btn-sm delete-task">Delete Task</button>
+    </div>`;
+    taskList.appendChild(listItem);
+    taskInput.value = ""; // Clears text input
+
+    // Add event listener for delete button
+    const deleteButton = listItem.querySelector(".delete-task");
+    deleteButton.addEventListener("click", () => {
+      taskToDelete = listItem; // store reference to task we want to delete
+      const modal = new bootstrap.Modal(
+        document.getElementById("deleteConfirmModal")
+      ); // open modal
+      modal.show();
+    });
+
+    // Add event listener for complete button
+    const completeButton = listItem.querySelector(".complete-btn");
+    completeButton.addEventListener("click", () => {
+      listItem.remove();
+    });
+  });
 }
 
 // ✅ Confirm delete handler
