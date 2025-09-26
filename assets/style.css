@@ -6,7 +6,9 @@
 }
 
 .task {
-  color: blueviolet;
   font-family: Arial, Helvetica, sans-serif;
-  font-style: italic;
+}
+
+html {
+  height: 100vh;
 }
