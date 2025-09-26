@@ -1,5 +1,5 @@
 // A simple data store for our lists
-const listData = []; //simple database to hold all list created and get unique ID
+const listData = {}; //simple database to hold all list created and get unique ID
 let listCounter = 0; //counter each time we create list the number will increase it gives it unique name and ID
 
 // Get references to the HTML elements
@@ -31,6 +31,15 @@ function createNewList() {
 
   // Automatically display the new list
   displayList(listId); //used to display the new list on activelist area
+
+  console.table(listData);
+}
+
+// Identifying selected list
+let currentSelectedList = "";
+
+function setCurrentList(listId) {
+  currentSelectedList = listId;
 }
 
 // Function to display a selected list
@@ -41,6 +50,8 @@ function displayList(listId) {
     //ensure if list exist before displaying it
     // Set the text content of the active list display area
     activeListDisplay.textContent = list.name; //takes the list name and plae the text in the active list area
+
+    setCurrentList(listId);
   }
 }
 
@@ -64,17 +75,20 @@ activeListDisplay.textContent = "Select or Create a List"; //sets inetial text d
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
+let taskToDelete = null; // NEW: keeps track of which task we want to delete
 
 // Add event listener for add task button
 addTaskBtn.addEventListener("click", addTask);
 taskInput.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
-    addTask();
+    addTask(event);
   }
 });
 
 // Function for adding tasks to list
-function addTask() {
+function addTask(event) {
+  // Getting the current list selected
+  const currentList = listData[currentSelectedList];
   const taskText = taskInput.value.trim();
 
   if (taskText !== "") {
@@ -90,7 +104,11 @@ function addTask() {
     // Add event listener for delete button
     const deleteButton = listItem.querySelector(".delete-task");
     deleteButton.addEventListener("click", () => {
-      listItem.remove();
+      taskToDelete = listItem; // store reference to task we want to delete
+      const modal = new bootstrap.Modal(
+        document.getElementById("deleteConfirmModal")
+      ); // open modal
+      modal.show();
     });
 
     // Add event listener for complete button
@@ -100,44 +118,27 @@ function addTask() {
     });
   } else {
   }
+
+  // Adding task to current list
+  currentList.tasks.push(taskText);
+  console.log(currentList);
 }
 
-//These are just placeholder lists i created to check the js function.
-const lists = {
-  listOne: {
-    name: "List 1",
-    items: ["item 1", "item 2", "item 3"],
-  },
-  listTwo: {
-    name: "List 2",
-    items: ["list2 item1", "list2 item2", "list2 item3"],
-  },
-  listThree: {
-    name: "List 3",
-    items: ["list3 item1", "list3 item2", "list3 item3"],
-  },
-};
+// ✅ Confirm delete handler
+document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+  if (taskToDelete) {
+    taskToDelete.remove(); // delete task
+    taskToDelete = null; // reset
+  }
+  // Close modal after deleting
+  const modalEl = document.getElementById("deleteConfirmModal");
+  const modal = bootstrap.Modal.getInstance(modalEl);
+  modal.hide();
+});
 
-function openList(listKey) {
-  document.querySelectorAll(".list-card").forEach((card) => {
-    card.classList.remove("active");
-  });
-
-  event.target.closest(".list-card").classList.add("active");
-
-  const list = lists[listKey];
-
-  const activeListDiv = document.getElementById("activeList");
-
-  let itemsHtml = "";
-  list.items.forEach((item) => {
-    itemsHtml += `<li class="list-group-item">${item}</li>`;
-  });
-
-  activeListDiv.innerHTML = `
-                <h4>${list.name}</h4>
-                <ul class="list-group">
-                    ${itemsHtml}
-                </ul>
-            `;
-}
+document.getElementById("cancelDeleteBtn").addEventListener("click", () => {
+  taskToDelete = null; // reset
+  const modalEl = document.getElementById("deleteConfirmModal");
+  const modal = bootstrap.Modal.getInstance(modalEl);
+  modal.hide(); // close the modal
+});

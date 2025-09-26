@@ -1,6 +1,8 @@
-# Ta-da List 📝
-## What is Ta-Da list?🧐
+# Ta-da list 📝
+## What is Ta-da list?🧐
 Ta-Da List is an interactive web application built with the Bootstrap CSS framework. It allows you to create and manage multiple to-do lists, making it easy to track and complete tasks across different projects. You can add as many lists and tasks as you need, giving you flexible control over your workflow.
+
+Acces Ta-da list here: https://pamhornedo.github.io/Ta-da_List/
 
 ## How does Ta-Da List Work ❓
 Ta-Da List consists of a header area and a main area. The main area is structured as a Bootstrap row with two columns. The left-hand column contains a card titled "My Lists", which includes a "Create List" button for adding new to-do lists.
