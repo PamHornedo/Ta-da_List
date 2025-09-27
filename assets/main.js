@@ -68,7 +68,6 @@ myListsContainer.addEventListener("click", (event) => {
   if (listItem) {
     const listId = listItem.getAttribute("data-list-id");
     displayList(listId);
-    console.log("button clicked");
     updateTaskList();
     saveTaskLists();
   }
@@ -145,7 +144,6 @@ function updateTaskList() {
 
   const currentList = listData[currentSelectedList];
   currentList.tasks.forEach((task) => createTaskElement(task));
-  console.log(currentList);
   saveTaskLists();
 }
 
