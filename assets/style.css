@@ -18,8 +18,15 @@ html {
   font-size: 18px;
 }
 
-.card-body {
-  height: 70vh;
+.list-group-item:hover {
+  text-decoration: underline;
+  color: #0d6efd;
+}
+
+.card-body,
+.card-body,
+.activeListarea {
+  min-height: 70vh;
 }
 
 #activeList {
