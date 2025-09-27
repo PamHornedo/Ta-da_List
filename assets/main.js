@@ -25,7 +25,7 @@ function saveTaskLists() {
 
 function newListElement(listName, listId) {
   const listItem = document.createElement("li");
-  listItem.classList.add("list-group-item");
+  listItem.classList.add("list-group-item", "custom-item");
   listItem.textContent = listName;
   listItem.setAttribute("data-list-id", listId);
 
