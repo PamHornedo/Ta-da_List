@@ -67,6 +67,7 @@ myListsContainer.addEventListener("click", (event) => {
   const listItem = event.target.closest(".list-group-item");
   if (listItem) {
     const listId = listItem.getAttribute("data-list-id");
+
     displayList(listId);
     updateTaskList();
     saveTaskLists();
